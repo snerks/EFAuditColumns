@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using ContosoUniversityWebApp.Dal;
 using ContosoUniversityWebApp.Models;
+using ContosoUniversityWebApp.ViewModels;
 
 namespace ContosoUniversityWebApp.Controllers
 {
@@ -16,9 +17,18 @@ namespace ContosoUniversityWebApp.Controllers
         private SchoolContext db = new SchoolContext();
 
         // GET: Students
+        //public ActionResult Index()
+        //{
+        //    return View(db.Students.ToList());
+        //}
+
         public ActionResult Index()
         {
-            return View(db.Students.ToList());
+            var sql = "select ID, CONCAT(FirstMidName, ' ', LastName) as FullName from Student";
+
+            var results = db.Database.SqlQuery<StudentFullName>(sql).ToList();
+
+            return View("IndexFullName", results);
         }
 
         // GET: Students/Details/5
